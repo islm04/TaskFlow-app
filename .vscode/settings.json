@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/programming/flutter/portfolio/taskflow/linux"
+    "cmake.sourceDirectory": "D:/programming/flutter/portfolio/taskflow/linux",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
