@@ -12,7 +12,10 @@ class AuthService {
   }
 
   // sign in
-  Future<UserCredential> signInWithEmailPassword(String email, String password) async {
+  Future<UserCredential> signInWithEmailPassword(
+    String email,
+    String password,
+  ) async {
     try {
       // sign user in
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -37,7 +40,11 @@ class AuthService {
   }
 
   // sign up
-  Future<UserCredential> signUpWithEmailPassword(String email, String password, String username) async {
+  Future<UserCredential> signUpWithEmailPassword(
+    String email,
+    String password,
+    String username,
+  ) async {
     try {
       // create user
       UserCredential userCredential = await _auth
@@ -54,6 +61,15 @@ class AuthService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
+    }
+  }
+
+  // send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "Failed to send password reset email.");
     }
   }
 

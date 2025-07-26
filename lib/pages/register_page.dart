@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/components/my_button.dart';
 import 'package:taskflow/components/my_textfield.dart';
+import 'package:taskflow/services/auth/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -36,7 +37,60 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void register() {}
+  // register method
+  Future<void> register(BuildContext context) async {
+    final auth = AuthService();
+
+    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPwController.text.trim();
+
+    // validate inputs
+    if (username.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (_) => const AlertDialog(
+          title: Text("Missing Fields"),
+          content: Text("Please fill in all fields"),
+        ),
+      );
+      return;
+    }
+    if (password != confirmPassword) {
+      showDialog(
+        context: context,
+        builder: (_) => const AlertDialog(title: Text("Passwords don't match")),
+      );
+      return;
+    }
+
+    try {
+      await auth.signUpWithEmailPassword(email, password, username);
+
+      if (!context.mounted) return;
+
+      Navigator.of(context).pushReplacementNamed('/home');
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("Success"),
+          content: Text("Account created! You can now log in."),
+        ),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Registration Error"),
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
 
               // login button
-              MyButton(text: "Register", onTap: register),
+              MyButton(text: "Register", onTap: () => register(context)),
 
               const SizedBox(height: 25),
 

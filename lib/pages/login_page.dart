@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/components/my_button.dart';
 import 'package:taskflow/components/my_textfield.dart';
+import 'package:taskflow/services/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onTap;
@@ -18,6 +19,87 @@ class _LoginPageState extends State<LoginPage> {
   // email and password focusNode
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+
+  // loading indicator state
+
+  void signIn() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await AuthService().signInWithEmailPassword(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+
+      if (mounted) Navigator.pop(context);
+      Navigator.of(context).pushReplacementNamed('/home');
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Sign In Failed"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  // forgot password
+  void forgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Email Required"),
+          content: Text("Please enter your email to reset your password."),
+        ),
+      );
+      return;
+    }
+
+    // show loading spinner
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await AuthService().sendPasswordResetEmail(email);
+      if (mounted) Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Email Sent"),
+          content: Text(
+            "A password reset link has been sent to your email. Please check your inbox.",
+          ),
+        ),
+      );
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -91,10 +173,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      "Forgot password?",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                    GestureDetector(
+                      onTap: forgotPassword,
+                      child: Text(
+                        "Forgot password?",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
                   ],
@@ -104,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
 
               // login button
-              MyButton(text: "Login", onTap: () {}),
+              MyButton(text: "Login", onTap: signIn),
 
               const SizedBox(height: 25),
 

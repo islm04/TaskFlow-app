@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskflow/services/auth/login_or_register.dart';
+import 'package:taskflow/pages/home_page.dart';
+import 'package:taskflow/pages/settings_page.dart';
+import 'package:taskflow/services/auth/auth_gate.dart';
 import 'package:taskflow/theme/theme_provider.dart';
 
 void main() async {
@@ -23,8 +25,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TaskFlow',
       debugShowCheckedModeBanner: false,
-      home: LoginOrRegister(),
       theme: Provider.of<ThemeProvider>(context).themeData,
+
+      initialRoute: '/auth',
+      routes: {
+        '/auth': (context) => const AuthGate(),
+        '/home': (context) => const HomePage(),
+        '/settings': (context) => const SettingsPage(),
+      },
     );
   }
 }
