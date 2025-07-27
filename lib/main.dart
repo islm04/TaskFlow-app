@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,11 +27,14 @@ class MyApp extends StatelessWidget {
       title: 'TaskFlow',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
+      darkTheme: Provider.of<ThemeProvider>(context).darkThemeData,
+      themeMode: ThemeMode.system,
 
       initialRoute: '/auth',
       routes: {
         '/auth': (context) => const AuthGate(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) =>
+            HomePage(uid: FirebaseAuth.instance.currentUser!.uid),
         '/settings': (context) => const SettingsPage(),
       },
     );

@@ -14,7 +14,7 @@ class AuthGate extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return HomePage();
+            return HomePage(uid: FirebaseAuth.instance.currentUser!.uid);
           } else {
             return const LoginOrRegister();
           }

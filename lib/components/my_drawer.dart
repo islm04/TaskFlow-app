@@ -4,10 +4,11 @@ import 'package:taskflow/services/auth/auth_service.dart';
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
-  void logout() {
+  void logout(BuildContext context) async {
     // get auth service
     final auth = AuthService();
     auth.signOut();
+    Navigator.of(context).pushReplacementNamed('/auth');
   }
 
   @override
@@ -80,7 +81,7 @@ class MyDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
               title: const Text("L O G O U T"),
-              onTap: logout,
+              onTap: () => logout(context),
             ),
           ),
         ],
