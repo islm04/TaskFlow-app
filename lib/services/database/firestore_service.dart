@@ -24,8 +24,11 @@ class FirestoreService {
     return getUserTaskCollection(uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Task.fromDocumentSnapshot(doc)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Task.fromDocumentSnapshot(doc))
+              .toList(),
+        );
   }
 
   // update a task
