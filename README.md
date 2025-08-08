@@ -1,16 +1,14 @@
-# taskflow
+# TaskFlow
 
-A new Flutter project.
+**TaskFlow** is a clean and minimal task management app built with **Flutter** and **Firebase**. It allows users to sign up or log in, create tasks with titles and descriptions, mark them as complete, edit, or delete them. The app also includes a dark mode toggle for improved user experience.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 🔐 **User Authentication** (Firebase Auth)
+- 📝 **Create, Edit & Delete Tasks**
+- 📌 **Mark Tasks as Completed**
+- ☁️ **Real-time Sync with Cloud Firestore**
+- 🌙 **Dark Mode Support**
+- 🧭 **Navigation Drawer & Settings Page**
